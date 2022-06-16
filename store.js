@@ -1,12 +1,17 @@
 import items from './items.json'
+import { addToCart } from './shoppingCart'
 import formatCurrency from './util/formatCurrency.js'
 
 const storeItemTemplate = document.querySelector('#store-item-template')
 const storeItemContainer = document.querySelector('[data-store-container]')
 
-console.log(items)
-
 export function setupStore() {
+  document.addEventListener('click', (e) => {
+    if (e.target.matches('[data-add-to-cart-button]')) {
+      const id = e.target.closest('[data-store-item]').dataset.itemId
+      addToCart(parseInt(id))
+    }
+  })
   items.forEach(renderStoreItem)
 }
 
