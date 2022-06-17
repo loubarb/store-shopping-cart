@@ -1,5 +1,6 @@
 import items from './items.json'
 import formatCurrency from './util/formatCurrency.js'
+import addGlobalEventListener from './util/eventListener.js'
 
 const shoppingCartButton = document.querySelector('[data-cart-button]')
 const shoppingCartContainer = document.querySelector('[data-cart-items-wrapper]')
@@ -10,6 +11,10 @@ const cartItemTotal = document.querySelector('[data-cart-total]')
 let shoppingCart = []
 
 export function setupShoppingCart() {
+  addGlobalEventListener('click', '[data-remove-from-cart-button]', (e) => {
+    const id = parseInt(e.target.closest('[data-item]').dataset.itemId)
+    removeFromCart(id)
+  })
   renderCart()
 }
 
@@ -24,6 +29,13 @@ export function addToCart(id) {
   } else {
     shoppingCart.push({ id: id, quantity: 1 })
   }
+  renderCart()
+}
+
+function removeFromCart(id) {
+  const existingItem = shoppingCart.find(entry => entry.id === id)
+  if (existingItem == null) return
+  shoppingCart = shoppingCart.filter(entry => entry.id !== id)
   renderCart()
 }
 
