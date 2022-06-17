@@ -5,11 +5,12 @@ const shoppingCartButton = document.querySelector('[data-cart-button]')
 const shoppingCartContainer = document.querySelector('[data-cart-items-wrapper]')
 const cartItemTemplate = document.querySelector('#cart-item-template')
 const cartItemContainer = document.querySelector('[data-cart-items]')
+const cartItemQuantity = document.querySelector('[data-cart-quantity]')
+const cartItemTotal = document.querySelector('[data-cart-total]')
 let shoppingCart = []
 
-
 export function setupShoppingCart() {
-
+  renderCart()
 }
 
 shoppingCartButton.addEventListener('click', () => {
@@ -27,7 +28,31 @@ export function addToCart(id) {
 }
 
 function renderCart() {
+  if (shoppingCart.length === 0) {
+    shoppingCartContainer.classList.add('invisible')
+  } else {
+    renderCartItems()
+  }
+}
+
+function renderCartItems() {
+  
+  const totalCents = shoppingCart.reduce((sum, entry) => {
+    const item = items.find(i => entry.id === i.id)
+    return sum + item.priceCents * entry.quantity
+  }, 0)
+  cartItemTotal.innerText = formatCurrency(totalCents / 100)
+
+  const quantity = shoppingCart.map(i => {
+    return i.quantity
+  })
+  const itemSum = quantity.reduce(function (x, y) {
+    return x + y
+  }, 0)
+
+  cartItemQuantity.innerText = itemSum
   cartItemContainer.innerHTML = ''
+
   shoppingCart.forEach(entry => {
     const item = items.find(i => entry.id === i.id)
     const cartItem = cartItemTemplate.content.cloneNode(true)
