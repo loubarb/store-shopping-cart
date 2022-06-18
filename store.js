@@ -7,6 +7,8 @@ const storeItemTemplate = document.querySelector('#store-item-template')
 const storeItemContainer = document.querySelector('[data-store-container]')
 
 export function setupStore() {
+  if (storeItemContainer == null) return
+  
   addGlobalEventListener('click', '[data-add-to-cart-button]', (e) => {
     const id = e.target.closest('[data-store-item]').dataset.itemId
     addToCart(parseInt(id))
