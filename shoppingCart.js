@@ -8,7 +8,8 @@ const cartItemTemplate = document.querySelector('#cart-item-template')
 const cartItemContainer = document.querySelector('[data-cart-items]')
 const cartItemQuantity = document.querySelector('[data-cart-quantity]')
 const cartItemTotal = document.querySelector('[data-cart-total]')
-let shoppingCart = []
+const SESSION_STORAGE_KEY = 'SHOPPING_CART-cart'
+let shoppingCart = loadCart()
 
 export function setupShoppingCart() {
   addGlobalEventListener('click', '[data-remove-from-cart-button]', (e) => {
@@ -16,11 +17,20 @@ export function setupShoppingCart() {
     removeFromCart(id)
   })
   renderCart()
+  shoppingCartButton.addEventListener('click', () => {
+    shoppingCartContainer.classList.toggle('invisible')
+  })
 }
 
-shoppingCartButton.addEventListener('click', () => {
-  shoppingCartContainer.classList.toggle('invisible')
-})
+function saveCart() {
+  sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(shoppingCart))
+}
+
+function loadCart() {
+  const cart = sessionStorage.getItem(SESSION_STORAGE_KEY)
+  console.log(cart)
+  return JSON.parse(cart) || []
+}
 
 export function addToCart(id) {
   const existingItem = shoppingCart.find(entry => entry.id === id)
@@ -30,6 +40,7 @@ export function addToCart(id) {
     shoppingCart.push({ id: id, quantity: 1 })
   }
   renderCart()
+  saveCart()
 }
 
 function removeFromCart(id) {
@@ -37,6 +48,13 @@ function removeFromCart(id) {
   if (existingItem == null) return
   shoppingCart = shoppingCart.filter(entry => entry.id !== id)
   renderCart()
+  if (shoppingCart.length === 0) {
+    cartItemContainer.innerHTML = ''
+    cartItemTotal.innerText = '$0.00'
+    cartItemQuantity.innerText = '0'
+  }
+  saveCart()
+  console.log(shoppingCart)
 }
 
 function renderCart() {
