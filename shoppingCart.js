@@ -16,6 +16,7 @@ export function setupShoppingCart() {
     const id = parseInt(e.target.closest('[data-item]').dataset.itemId)
     removeFromCart(id)
   })
+  shoppingCart = loadCart()
   renderCart()
   shoppingCartButton.addEventListener('click', () => {
     shoppingCartContainer.classList.toggle('invisible')
@@ -28,7 +29,6 @@ function saveCart() {
 
 function loadCart() {
   const cart = sessionStorage.getItem(SESSION_STORAGE_KEY)
-  console.log(cart)
   return JSON.parse(cart) || []
 }
 
