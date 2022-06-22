@@ -10,6 +10,7 @@ const cartItemQuantity = document.querySelector('[data-cart-quantity]')
 const cartItemTotal = document.querySelector('[data-cart-total]')
 const SESSION_STORAGE_KEY = 'SHOPPING_CART-cart'
 let shoppingCart = loadCart()
+const addToCartButton = document.querySelector('[data-add-to-cart]')
 
 export function setupShoppingCart() {
   addGlobalEventListener('click', '[data-remove-from-cart-button]', (e) => {
@@ -38,6 +39,9 @@ export function addToCart(id) {
     existingItem.quantity++
   } else {
     shoppingCart.push({ id: id, quantity: 1 })
+  }
+  if (shoppingCart.length > 0) {
+    shoppingCartContainer.classList.remove('invisible')
   }
   renderCart()
   saveCart()
