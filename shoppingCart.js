@@ -53,12 +53,11 @@ function removeFromCart(id) {
   shoppingCart = shoppingCart.filter(entry => entry.id !== id)
   renderCart()
   if (shoppingCart.length === 0) {
-    cartItemContainer.innerHTML = ''
+    cartItemContainer.innerHTML = '<p>No items in cart</p><br>'
     cartItemTotal.innerText = '$0.00'
     cartItemQuantity.innerText = '0'
   }
   saveCart()
-  console.log(shoppingCart)
 }
 
 function renderCart() {
